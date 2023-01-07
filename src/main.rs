@@ -30,11 +30,12 @@ impl Cpu {
         println!("PC count up")
     }
 
-    fn decode(&self) {
-        println!("Decode instruction")
+    fn decode(&self, immidiate: u8) -> (u8, u8) {
+        println!("Decode instruction");
+        return (0, 0);
     }
 
-    fn execute(&self) {
+    fn execute(&self, opecode: u8, immidiate: u8) {
         println!("Execute instruction")
     }
 }
