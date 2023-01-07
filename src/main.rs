@@ -1,7 +1,5 @@
 use tokio::time::{sleep, Duration};
 
-type Register = u8;
-
 struct Rom {}
 
 impl Rom {
@@ -11,13 +9,13 @@ impl Rom {
 }
 
 struct Cpu {
-    pc: Register,
-    carry: Register,
-    a: Register,
-    b: Register,
+    pc: u8,
+    carry: u8,
+    a: u8,
+    b: u8,
     rom: Rom,
-    input: Register,
-    output: Register,
+    input: u8,
+    output: u8,
 }
 
 impl Cpu {
@@ -46,7 +44,7 @@ struct Emulator {
 }
 
 impl Emulator {
-    fn run(&self) {
+    fn run(&mut self) {
         self.cpu.fetch();
         self.cpu.pc_up();
         self.cpu.decode();
@@ -56,11 +54,13 @@ impl Emulator {
 
 #[tokio::main]
 async fn main() {
+    let rom: Rom = Rom {};
     let cpu = Cpu {
         pc: 0,
+        carry: 0,
         a: 0,
         b: 0,
-        carry: 0,
+        rom: rom,
         input: 0,
         output: 0,
     };
