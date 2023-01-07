@@ -4,12 +4,18 @@ type Register = u8;
 
 struct Rom {}
 
+impl Rom {
+    fn get_immidiate(&self) -> u8 {
+        return 0;
+    }
+}
+
 struct Cpu {
     pc: Register,
     carry: Register,
     a: Register,
     b: Register,
-    rom: Register,
+    rom: Rom,
     input: Register,
     output: Register,
 }
@@ -17,7 +23,8 @@ struct Cpu {
 impl Cpu {
     fn fetch(&self) -> u8 {
         println!("Fetch program");
-        return 0;
+        let imm = self.rom.get_immidiate();
+        return imm;
     }
 
     fn pc_up(&mut self) {
