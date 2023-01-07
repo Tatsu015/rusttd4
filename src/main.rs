@@ -3,7 +3,7 @@ use tokio::time::{sleep, Duration};
 struct Rom {}
 
 impl Rom {
-    fn get_immidiate(&self, adress: u8) -> u8 {
+    fn get_instruction(&self, adress: u8) -> u8 {
         return 0;
     }
 }
@@ -21,8 +21,8 @@ struct Cpu {
 impl Cpu {
     fn fetch(&self) -> u8 {
         println!("Fetch program");
-        let imm = self.rom.get_immidiate(self.pc);
-        return imm;
+        let ins = self.rom.get_instruction(self.pc);
+        return ins;
     }
 
     fn pc_up(&mut self) {
@@ -30,7 +30,7 @@ impl Cpu {
         println!("PC count up")
     }
 
-    fn decode(&self, immidiate: u8) -> (u8, u8) {
+    fn decode(&self, instruction: u8) -> (u8, u8) {
         println!("Decode instruction");
         return (0, 0);
     }
@@ -46,10 +46,10 @@ struct Emulator {
 
 impl Emulator {
     fn run(&mut self) {
-        self.cpu.fetch();
+        let instruction = self.cpu.fetch();
         self.cpu.pc_up();
-        self.cpu.decode();
-        self.cpu.execute();
+        let decoded = self.cpu.decode(instruction);
+        self.cpu.execute(decoded.0, decoded.1);
     }
 }
 
