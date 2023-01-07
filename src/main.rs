@@ -19,22 +19,6 @@ struct Cpu {
     output: u8,
 }
 
-#[repr(usize)]
-enum OpeCode {
-    AddA = 0x00,
-    MovAB = 0x01,
-    InA = 0x02,
-    MovA = 0x03,
-    MovBA = 0x04,
-    AddB = 0x05,
-    InB = 0x06,
-    MovB = 0x07,
-    OutB = 0x09,
-    Out = 0x0b,
-    Jnc = 0x0c,
-    Jmp = 0x0f,
-}
-
 impl Cpu {
     fn fetch(&self) -> u8 {
         println!("Fetch program");
@@ -54,28 +38,28 @@ impl Cpu {
         return (ope, imm);
     }
 
-    fn execute(&self, opecode: OpeCode, immidiate: u8) {
+    fn execute(&mut self, opecode: u8, immidiate: u8) {
         println!("Execute instruction");
         match opecode {
-            OpeCode::AddA => self.add_a(immidiate),
-            OpeCode::MovAB => self.mov_ab(immidiate),
-            OpeCode::InA => self.in_a(immidiate),
-            OpeCode::MovA => self.mov_a(immidiate),
-            OpeCode::MovBA => self.mov_ba(immidiate),
-            OpeCode::AddB => self.add_b(immidiate),
-            OpeCode::InB => self.in_b(immidiate),
-            OpeCode::MovB => self.mov_b(immidiate),
-            OpeCode::OutB => self.out_b(immidiate),
-            OpeCode::Out => self.out(immidiate),
-            OpeCode::Jnc => self.jnc(immidiate),
-            OpeCode::Jmp => self.jmp(immidiate),
+            0x00 => self.add_a(immidiate),
+            0x01 => self.mov_ab(immidiate),
+            0x02 => self.in_a(immidiate),
+            0x03 => self.mov_a(immidiate),
+            0x04 => self.mov_ba(immidiate),
+            0x05 => self.add_b(immidiate),
+            0x06 => self.in_b(immidiate),
+            0x07 => self.mov_b(immidiate),
+            0x09 => self.out_b(immidiate),
+            0x0b => self.out(immidiate),
+            0x0c => self.jnc(immidiate),
+            0x0f => self.jmp(immidiate),
             _ => {
                 println!("Unknown OpeCode! {}", opecode as u8);
             }
         }
     }
 
-    fn add_a(&self, immidiate: u8) {
+    fn add_a(&mut self, immidiate: u8) {
         let new_val = self.a + immidiate;
         if new_val > REGISTER_CAPACITY {
             self.carry = 1
@@ -85,27 +69,27 @@ impl Cpu {
         self.a = new_val
     }
 
-    fn mov_ab(&self, immidiate: u8) {
+    fn mov_ab(&mut self, immidiate: u8) {
         self.a = self.b;
         self.carry = 0;
     }
 
-    fn in_a(&self, immidiate: u8) {
+    fn in_a(&mut self, immidiate: u8) {
         self.a = immidiate;
         self.carry = 0;
     }
 
-    fn mov_a(&self, immidiate: u8) {
+    fn mov_a(&mut self, immidiate: u8) {
         self.a = immidiate;
         self.carry = 0;
     }
 
-    fn mov_ba(&self, immidiate: u8) {
+    fn mov_ba(&mut self, immidiate: u8) {
         self.b = self.a;
         self.carry = 0;
     }
 
-    fn add_b(&self, immidiate: u8) {
+    fn add_b(&mut self, immidiate: u8) {
         let new_val = self.b + immidiate;
         if new_val > REGISTER_CAPACITY {
             self.carry = 1;
@@ -115,32 +99,32 @@ impl Cpu {
         self.b = new_val;
     }
 
-    fn in_b(&self, immidiate: u8) {
+    fn in_b(&mut self, immidiate: u8) {
         self.b = self.input;
         self.carry = 0;
     }
 
-    fn mov_b(&self, immidiate: u8) {
+    fn mov_b(&mut self, immidiate: u8) {
         self.b = immidiate;
         self.carry = 0;
     }
 
-    fn out_b(&self, immidiate: u8) {
+    fn out_b(&mut self, immidiate: u8) {
         self.output = self.b;
         self.carry = 0;
     }
 
-    fn out(&self, immidiate: u8) {
+    fn out(&mut self, immidiate: u8) {
         self.output = immidiate;
         self.carry = 0;
     }
 
-    fn jnc(&self, immidiate: u8) {
+    fn jnc(&mut self, immidiate: u8) {
         self.pc = immidiate;
         self.carry = 0;
     }
 
-    fn jmp(&self, immidiate: u8) {
+    fn jmp(&mut self, immidiate: u8) {
         if self.carry == 0 {
             self.pc = immidiate;
             self.carry = 0;
