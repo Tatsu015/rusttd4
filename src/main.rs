@@ -5,7 +5,7 @@ type Register = u8;
 struct Rom {}
 
 impl Rom {
-    fn get_immidiate(&self) -> u8 {
+    fn get_immidiate(&self, adress: u8) -> u8 {
         return 0;
     }
 }
@@ -23,7 +23,7 @@ struct Cpu {
 impl Cpu {
     fn fetch(&self) -> u8 {
         println!("Fetch program");
-        let imm = self.rom.get_immidiate();
+        let imm = self.rom.get_immidiate(self.pc);
         return imm;
     }
 
