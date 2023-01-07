@@ -45,9 +45,9 @@ impl Cpu {
             0x01 => self.mov_ab(immidiate),
             0x02 => self.in_a(immidiate),
             0x03 => self.mov_a(immidiate),
-            0x04 => self.mov_ba(immidiate),
+            0x04 => self.mov_ba(),
             0x05 => self.add_b(immidiate),
-            0x06 => self.in_b(immidiate),
+            0x06 => self.in_b(),
             0x07 => self.mov_b(immidiate),
             0x09 => self.out_b(immidiate),
             0x0b => self.out(immidiate),
@@ -84,7 +84,7 @@ impl Cpu {
         self.carry = 0;
     }
 
-    fn mov_ba(&mut self, immidiate: u8) {
+    fn mov_ba(&mut self) {
         self.b = self.a;
         self.carry = 0;
     }
@@ -99,7 +99,7 @@ impl Cpu {
         self.b = new_val;
     }
 
-    fn in_b(&mut self, immidiate: u8) {
+    fn in_b(&mut self) {
         self.b = self.input;
         self.carry = 0;
     }
