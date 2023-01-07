@@ -2,21 +2,26 @@ use tokio::time::{sleep, Duration};
 
 type Register = u8;
 
+struct Rom {}
+
 struct Cpu {
     pc: Register,
     carry: Register,
     a: Register,
     b: Register,
+    rom: Register,
     input: Register,
     output: Register,
 }
 
 impl Cpu {
-    fn fetch(&self) {
-        println!("Fetch program")
+    fn fetch(&self) -> u8 {
+        println!("Fetch program");
+        return 0;
     }
 
-    fn pc_up(&self) {
+    fn pc_up(&mut self) {
+        self.carry += 1;
         println!("PC count up")
     }
 
