@@ -64,7 +64,7 @@ async fn main() {
         input: 0,
         output: 0,
     };
-    let emulator = Emulator { cpu };
+    let mut emulator = Emulator { cpu };
 
     loop {
         emulator.run();
