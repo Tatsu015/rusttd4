@@ -32,7 +32,9 @@ impl Cpu {
 
     fn decode(&self, instruction: u8) -> (u8, u8) {
         println!("Decode instruction");
-        return (0, 0);
+        let imm = instruction & 0x0f;
+        let ope = (instruction & 0xf0) >> 4;
+        return (ope, imm);
     }
 
     fn execute(&self, opecode: u8, immidiate: u8) {
