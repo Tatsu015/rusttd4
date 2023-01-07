@@ -1,5 +1,6 @@
 use tokio::time::{sleep, Duration};
 
+const REGISTER_CAPACITY: u8 = 0x0f;
 struct Rom {}
 
 impl Rom {
@@ -18,6 +19,7 @@ struct Cpu {
     output: u8,
 }
 
+#[repr(usize)]
 enum OpeCode {
     AddA = 0x00,
     MovAB = 0x01,
@@ -53,6 +55,7 @@ impl Cpu {
     }
 
     fn execute(&self, opecode: OpeCode, immidiate: u8) {
+        println!("Execute instruction");
         match opecode {
             OpeCode::AddA => self.add_a(immidiate),
             OpeCode::MovAB => self.mov_ab(immidiate),
@@ -66,23 +69,84 @@ impl Cpu {
             OpeCode::Out => self.out(immidiate),
             OpeCode::Jnc => self.jnc(immidiate),
             OpeCode::Jmp => self.jmp(immidiate),
-            _ => {}
+            _ => {
+                println!("Unknown OpeCode! {}", opecode as u8);
+            }
         }
-        println!("Execute instruction")
     }
 
-    fn add_a(&self, immidiate: u8) {}
-    fn mov_ab(&self, immidiate: u8) {}
-    fn in_a(&self, immidiate: u8) {}
-    fn mov_a(&self, immidiate: u8) {}
-    fn mov_ba(&self, immidiate: u8) {}
-    fn add_b(&self, immidiate: u8) {}
-    fn in_b(&self, immidiate: u8) {}
-    fn mov_b(&self, immidiate: u8) {}
-    fn out_b(&self, immidiate: u8) {}
-    fn out(&self, immidiate: u8) {}
-    fn jnc(&self, immidiate: u8) {}
-    fn jmp(&self, immidiate: u8) {}
+    fn add_a(&self, immidiate: u8) {
+        let new_val = self.a + immidiate;
+        if new_val > REGISTER_CAPACITY {
+            self.carry = 1
+        } else {
+            self.carry = 0
+        }
+        self.a = new_val
+    }
+
+    fn mov_ab(&self, immidiate: u8) {
+        self.a = self.b;
+        self.carry = 0;
+    }
+
+    fn in_a(&self, immidiate: u8) {
+        self.a = immidiate;
+        self.carry = 0;
+    }
+
+    fn mov_a(&self, immidiate: u8) {
+        self.a = immidiate;
+        self.carry = 0;
+    }
+
+    fn mov_ba(&self, immidiate: u8) {
+        self.b = self.a;
+        self.carry = 0;
+    }
+
+    fn add_b(&self, immidiate: u8) {
+        let new_val = self.b + immidiate;
+        if new_val > REGISTER_CAPACITY {
+            self.carry = 1;
+        } else {
+            self.carry = 0;
+        }
+        self.b = new_val;
+    }
+
+    fn in_b(&self, immidiate: u8) {
+        self.b = self.input;
+        self.carry = 0;
+    }
+
+    fn mov_b(&self, immidiate: u8) {
+        self.b = immidiate;
+        self.carry = 0;
+    }
+
+    fn out_b(&self, immidiate: u8) {
+        self.output = self.b;
+        self.carry = 0;
+    }
+
+    fn out(&self, immidiate: u8) {
+        self.output = immidiate;
+        self.carry = 0;
+    }
+
+    fn jnc(&self, immidiate: u8) {
+        self.pc = immidiate;
+        self.carry = 0;
+    }
+
+    fn jmp(&self, immidiate: u8) {
+        if self.carry == 0 {
+            self.pc = immidiate;
+            self.carry = 0;
+        }
+        self.carry = 0;
+    }
 }
 
 struct Emulator {
