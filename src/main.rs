@@ -2,6 +2,9 @@ use std::fs::File;
 use std::io;
 use std::io::prelude::*;
 use tokio::time::{sleep, Duration};
+extern crate env_logger as logger;
+extern crate log;
+use std::env;
 
 const REGISTER_CAPACITY: u8 = 0x0f;
 struct Rom {
@@ -25,26 +28,32 @@ struct Cpu {
 }
 
 impl Cpu {
+    fn show(&self) {
+        let s = format!("{:0>4b}", self.output);
+        let s = s.replace("0", "□").replace("1", "■");
+        println!("{}", s);
+    }
+
     fn fetch(&self) -> u8 {
-        println!("Fetch program");
+        log::debug!("Fetch program");
         let ins = self.rom.get_instruction(self.pc);
         return ins;
     }
 
     fn pc_up(&mut self) {
         self.pc += 1;
-        println!("PC count up")
+        log::debug!("PC count up")
     }
 
     fn decode(&self, instruction: u8) -> (u8, u8) {
-        println!("Decode instruction");
+        log::debug!("Decode instruction");
         let imm = instruction & 0x0f;
         let ope = (instruction & 0xf0) >> 4;
         return (ope, imm);
     }
 
     fn execute(&mut self, opecode: u8, immidiate: u8) {
-        println!("Execute instruction");
+        log::debug!("Execute instruction");
         match opecode {
             0x00 => self.add_a(immidiate),
             0x01 => self.mov_ab(),
@@ -59,7 +68,7 @@ impl Cpu {
             0x0c => self.jnc(immidiate),
             0x0f => self.jmp(immidiate),
             _ => {
-                println!("Unknown OpeCode! {}", opecode as u8);
+                log::error!("Unknown OpeCode! {}", opecode as u8);
             }
         }
     }
@@ -143,7 +152,12 @@ struct Emulator {
 }
 
 impl Emulator {
+    fn show(&self) {
+        self.cpu.show();
+    }
+
     fn run(&mut self) {
+        self.show();
         let instruction = self.cpu.fetch();
         self.cpu.pc_up();
         let decoded = self.cpu.decode(instruction);
@@ -153,6 +167,9 @@ impl Emulator {
 
 #[tokio::main]
 async fn main() -> io::Result<()> {
+    env::set_var("RUST_LOG", "info");
+    logger::init();
+
     let mut f = File::open("example/bin/led")?;
     let mut program = Vec::new();
     f.read_to_end(&mut program)?;
@@ -171,6 +188,6 @@ async fn main() -> io::Result<()> {
 
     loop {
         emulator.run();
-        sleep(Duration::from_millis(1000)).await;
+        sleep(Duration::from_millis(100)).await;
     }
 }
