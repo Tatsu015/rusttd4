@@ -133,12 +133,12 @@ impl Cpu {
         self.carry = 0;
     }
 
-    fn jnc(&mut self, immidiate: u8) {
+    fn jmp(&mut self, immidiate: u8) {
         self.pc = immidiate;
         self.carry = 0;
     }
 
-    fn jmp(&mut self, immidiate: u8) {
+    fn jnc(&mut self, immidiate: u8) {
         if self.carry == 0 {
             self.pc = immidiate;
             self.carry = 0;
@@ -170,7 +170,7 @@ async fn main() -> io::Result<()> {
     env::set_var("RUST_LOG", "info");
     logger::init();
 
-    let mut f = File::open("example/bin/led")?;
+    let mut f = File::open("example/bin/ramentimer")?;
     let mut program = Vec::new();
     f.read_to_end(&mut program)?;
 
@@ -188,6 +188,6 @@ async fn main() -> io::Result<()> {
 
     loop {
         emulator.run();
-        sleep(Duration::from_millis(100)).await;
+        sleep(Duration::from_millis(10)).await;
     }
 }
