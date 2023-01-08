@@ -32,7 +32,7 @@ impl Cpu {
     }
 
     fn pc_up(&mut self) {
-        self.carry += 1;
+        self.pc += 1;
         println!("PC count up")
     }
 
