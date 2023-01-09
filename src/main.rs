@@ -17,6 +17,24 @@ impl Rom {
     }
 }
 
+struct Register {
+    val: u8,
+}
+
+impl Register {
+    fn set(&mut self, val: u8) {
+        if val > REGISTER_CAPACITY {
+            self.val = 0;
+        } else {
+            self.val = val;
+        }
+    }
+
+    fn get(&self) -> u8 {
+        return self.val;
+    }
+}
+
 struct Cpu {
     pc: u8,
     carry: u8,
@@ -188,6 +206,6 @@ async fn main() -> io::Result<()> {
 
     loop {
         emulator.run();
-        sleep(Duration::from_millis(10)).await;
+        sleep(Duration::from_millis(100)).await;
     }
 }
