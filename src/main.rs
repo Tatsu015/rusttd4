@@ -36,30 +36,31 @@ impl Register {
 }
 
 struct Cpu {
-    pc: u8,
-    carry: u8,
-    a: u8,
-    b: u8,
+    pc: Register,
+    carry: Register,
+    a: Register,
+    b: Register,
     rom: Rom,
-    input: u8,
-    output: u8,
+    input: Register,
+    output: Register,
 }
 
 impl Cpu {
     fn show(&self) {
-        let s = format!("{:0>4b}", self.output);
+        let s = format!("{:0>4b}", self.output.get());
         let s = s.replace("0", "□").replace("1", "■");
         println!("{}", s);
     }
 
     fn fetch(&self) -> u8 {
         log::debug!("Fetch program");
-        let ins = self.rom.get_instruction(self.pc);
+        let ins = self.rom.get_instruction(self.pc.get());
         return ins;
     }
 
     fn pc_up(&mut self) {
-        self.pc += 1;
+        let pc = self.pc.get();
+        self.pc.set(pc + 1);
         log::debug!("PC count up")
     }
 
@@ -92,76 +93,80 @@ impl Cpu {
     }
 
     fn add_a(&mut self, immidiate: u8) {
-        let new_val = self.a + immidiate;
+        let new_val = self.a.get() + immidiate;
         if new_val > REGISTER_CAPACITY {
-            self.carry = 1
+            self.carry.set(1);
         } else {
-            self.carry = 0
+            self.carry.set(0);
         }
-        self.a = new_val
+        self.a.set(new_val);
     }
 
     fn mov_ab(&mut self) {
-        self.a = self.b;
-        self.carry = 0;
+        let new_val = self.b.get();
+        self.a.set(new_val);
+        self.carry.set(0);
     }
 
     fn in_a(&mut self, immidiate: u8) {
-        self.a = immidiate;
-        self.carry = 0;
+        self.a.set(immidiate);
+        self.carry.set(0);
     }
 
     fn mov_a(&mut self, immidiate: u8) {
-        self.a = immidiate;
-        self.carry = 0;
+        self.a.set(immidiate);
+        self.carry.set(0);
     }
 
     fn mov_ba(&mut self) {
-        self.b = self.a;
-        self.carry = 0;
+        let new_val = self.a.get();
+        self.b.set(new_val);
+        self.carry.set(0);
     }
 
     fn add_b(&mut self, immidiate: u8) {
-        let new_val = self.b + immidiate;
+        let new_val = self.b.get() + immidiate;
         if new_val > REGISTER_CAPACITY {
-            self.carry = 1;
+            self.carry.set(1);
         } else {
-            self.carry = 0;
+            self.carry.set(0);
         }
-        self.b = new_val;
+        self.b.set(new_val);
     }
 
     fn in_b(&mut self) {
-        self.b = self.input;
-        self.carry = 0;
+        let new_val = self.input.get();
+        self.b.set(new_val);
+        self.carry.set(0);
     }
 
     fn mov_b(&mut self, immidiate: u8) {
-        self.b = immidiate;
-        self.carry = 0;
+        self.b.set(immidiate);
+        self.carry.set(0);
     }
 
     fn out_b(&mut self) {
-        self.output = self.b;
-        self.carry = 0;
+        let new_val = self.b.get();
+        self.output.set(new_val);
+        self.carry.set(0);
     }
 
     fn out(&mut self, immidiate: u8) {
-        self.output = immidiate;
-        self.carry = 0;
+        self.output.set(immidiate);
+        self.carry.set(0);
     }
 
     fn jmp(&mut self, immidiate: u8) {
-        self.pc = immidiate;
-        self.carry = 0;
+        self.pc.set(immidiate);
+        self.carry.set(0);
     }
 
     fn jnc(&mut self, immidiate: u8) {
-        if self.carry == 0 {
-            self.pc = immidiate;
-            self.carry = 0;
+        if self.carry.get() == 0 {
+            self.pc.set(immidiate);
+            self.carry.set(0);
         }
-        self.carry = 0;
+        self.carry.set(0);
     }
 }
 
@@ -194,13 +199,13 @@ async fn main() -> io::Result<()> {
 
     let rom: Rom = Rom { program };
     let cpu = Cpu {
-        pc: 0,
-        carry: 0,
-        a: 0,
-        b: 0,
+        pc: Register { val: 0 },
+        carry: Register { val: 0 },
+        a: Register { val: 0 },
+        b: Register { val: 0 },
         rom: rom,
-        input: 0,
-        output: 0,
+        input: Register { val: 0 },
+        output: Register { val: 0 },
     };
     let mut emulator = Emulator { cpu };
 
