@@ -6,16 +6,9 @@ extern crate env_logger as logger;
 extern crate log;
 use std::env;
 
-const REGISTER_CAPACITY: u8 = 0x0f;
-struct Rom {
-    program: Vec<u8>,
-}
+mod rom;
 
-impl Rom {
-    fn get_instruction(&self, adress: u8) -> u8 {
-        return self.program[adress as usize];
-    }
-}
+const REGISTER_CAPACITY: u8 = 0x0f;
 
 struct Register {
     val: u8,
@@ -40,7 +33,7 @@ struct Cpu {
     carry: Register,
     a: Register,
     b: Register,
-    rom: Rom,
+    rom: rom::Rom,
     input: Register,
     output: Register,
 }
@@ -197,7 +190,7 @@ async fn main() -> io::Result<()> {
     let mut program = Vec::new();
     f.read_to_end(&mut program)?;
 
-    let rom: Rom = Rom { program };
+    let rom = rom::Rom { program };
     let cpu = Cpu {
         pc: Register { val: 0 },
         carry: Register { val: 0 },
