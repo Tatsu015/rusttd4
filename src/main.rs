@@ -73,7 +73,6 @@ impl Cpu {
         } else {
             self.carry.set(0);
         }
-        self.carry.set(1);
         self.a.set(new_val);
     }
 
@@ -186,6 +185,6 @@ async fn main() -> io::Result<()> {
 
     loop {
         emulator.run();
-        sleep(Duration::from_millis(1000)).await;
+        sleep(Duration::from_millis(100)).await;
     }
 }
