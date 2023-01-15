@@ -6,27 +6,10 @@ extern crate env_logger as logger;
 extern crate log;
 use std::env;
 
+mod register;
 mod rom;
 
 const REGISTER_CAPACITY: u8 = 0x0f;
-
-struct Register {
-    val: u8,
-}
-
-impl Register {
-    fn set(&mut self, val: u8) {
-        if val > REGISTER_CAPACITY {
-            self.val = 0;
-        } else {
-            self.val = val;
-        }
-    }
-
-    fn get(&self) -> u8 {
-        return self.val;
-    }
-}
 
 struct Cpu {
     pc: Register,
