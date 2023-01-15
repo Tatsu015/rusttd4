@@ -9,16 +9,14 @@ use std::env;
 mod register;
 mod rom;
 
-const REGISTER_CAPACITY: u8 = 0x0f;
-
 struct Cpu {
-    pc: Register,
-    carry: Register,
-    a: Register,
-    b: Register,
+    pc: register::Register,
+    carry: register::Register,
+    a: register::Register,
+    b: register::Register,
     rom: rom::Rom,
-    input: Register,
-    output: Register,
+    input: register::Register,
+    output: register::Register,
 }
 
 impl Cpu {
@@ -70,11 +68,12 @@ impl Cpu {
 
     fn add_a(&mut self, immidiate: u8) {
         let new_val = self.a.get() + immidiate;
-        if new_val > REGISTER_CAPACITY {
+        if self.carry.is_overflow(new_val) {
             self.carry.set(1);
         } else {
             self.carry.set(0);
         }
+        self.carry.set(1);
         self.a.set(new_val);
     }
 
@@ -102,7 +101,7 @@ impl Cpu {
 
     fn add_b(&mut self, immidiate: u8) {
         let new_val = self.b.get() + immidiate;
-        if new_val > REGISTER_CAPACITY {
+        if self.carry.is_overflow(new_val) {
             self.carry.set(1);
         } else {
             self.carry.set(0);
@@ -175,18 +174,18 @@ async fn main() -> io::Result<()> {
 
     let rom = rom::Rom { program };
     let cpu = Cpu {
-        pc: Register { val: 0 },
-        carry: Register { val: 0 },
-        a: Register { val: 0 },
-        b: Register { val: 0 },
+        pc: register::Register::new(),
+        carry: register::Register::new(),
+        a: register::Register::new(),
+        b: register::Register::new(),
         rom: rom,
-        input: Register { val: 0 },
-        output: Register { val: 0 },
+        input: register::Register::new(),
+        output: register::Register::new(),
     };
     let mut emulator = Emulator { cpu };
 
     loop {
         emulator.run();
-        sleep(Duration::from_millis(100)).await;
+        sleep(Duration::from_millis(1000)).await;
     }
 }
