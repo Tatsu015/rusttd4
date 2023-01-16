@@ -1,6 +1,5 @@
-use std::fs::File;
 use std::io;
-use std::io::prelude::*;
+
 use tokio::time::{sleep, Duration};
 extern crate env_logger as logger;
 extern crate log;
@@ -167,11 +166,7 @@ async fn main() -> io::Result<()> {
     env::set_var("RUST_LOG", "info");
     logger::init();
 
-    let mut f = File::open("example/bin/ramentimer")?;
-    let mut program = Vec::new();
-    f.read_to_end(&mut program)?;
-
-    let rom = rom::Rom { program };
+    let rom = rom::Rom::new("example/bin/ramentimer")?;
     let cpu = Cpu {
         pc: register::Register::new(),
         carry: register::Register::new(),
@@ -181,6 +176,7 @@ async fn main() -> io::Result<()> {
         input: register::Register::new(),
         output: register::Register::new(),
     };
+
     let mut emulator = Emulator { cpu };
 
     loop {
