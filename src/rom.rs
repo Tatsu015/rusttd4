@@ -8,18 +8,18 @@ pub struct Rom {
 
 impl Rom {
     pub fn new(program_path: &str) -> Rom {
-        let f = match File::open(program_path) {
+        let mut f = match File::open(program_path) {
             Ok(file) => file,
             Err(error) => {
-                panic!("Can not open program file : {:?}", program_path);
+                panic!("Can not open program file : {:?}", error);
             }
         };
 
         let mut program = Vec::new();
-        let res = match f.read_to_end(&mut program) {
+        let _ = match f.read_to_end(&mut program) {
             Ok(s) => s,
             Err(err) => {
-                panic!("Can not read program file : {:?}", program_path);
+                panic!("Can not read program file : {:?}", err);
             }
         };
         let rom = Rom { program: program };
