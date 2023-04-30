@@ -25,10 +25,8 @@ impl Cpu {
         return cpu;
     }
 
-    pub fn show(&self) {
-        let s = format!("{:0>4b}", self.output.get());
-        let s = s.replace("0", "□").replace("1", "■");
-        println!("{}", s);
+    pub fn get_out(&self) -> u8 {
+        return self.output.get();
     }
 
     pub fn fetch(&self) -> u8 {

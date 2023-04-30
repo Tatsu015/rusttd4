@@ -26,6 +26,9 @@ impl Emulator {
     }
 
     fn show(&self) {
-        self.cpu.show();
+        let out = self.cpu.get_out();
+        let s = format!("{:0>4b}", out);
+        let s = s.replace("0", "□").replace("1", "■");
+        println!("{}", s);
     }
 }
