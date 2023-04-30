@@ -7,8 +7,8 @@ pub struct Emulator {
 }
 
 impl Emulator {
-    pub fn new() -> Emulator {
-        let rom = Rom::new("example/bin/ramentimer");
+    pub fn new(program_path: &str) -> Emulator {
+        let rom = Rom::new(program_path);
         let input = Register::new();
         let output = Register::new();
         let cpu = Cpu::new(rom, input, output);
