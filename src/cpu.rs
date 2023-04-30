@@ -18,9 +18,9 @@ impl Cpu {
             carry: Register::new(),
             a: Register::new(),
             b: Register::new(),
-            rom: rom,
-            input: input,
-            output: output,
+            rom,
+            input,
+            output,
         };
         return cpu;
     }
