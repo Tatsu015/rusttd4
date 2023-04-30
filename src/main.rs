@@ -16,10 +16,15 @@ use crate::emulator::Emulator;
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-    #[arg(short, long)]
-    program_path: String,
+    // execute program file name
+    #[arg(long, help = "specify execute program filepath")]
+    program: String,
 
-    #[arg(short, long, default_value_t = 100)]
+    #[arg(
+        long,
+        default_value_t = 100,
+        help = "change clock speed in ms (default 100ms)"
+    )]
     clock: u64,
 }
 
@@ -29,7 +34,7 @@ async fn main() -> io::Result<()> {
     env::set_var("RUST_LOG", "info");
     logger::init();
 
-    let mut emulator = Emulator::new(&args.program_path);
+    let mut emulator = Emulator::new(&args.program);
     let clock = args.clock;
 
     loop {
