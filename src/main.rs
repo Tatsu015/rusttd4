@@ -47,7 +47,6 @@ async fn main() {
     let cli = Args::parse();
     match cli.subcmd {
         SubCommand::Emulate { program, clock } => {
-            println!("emulate program: {}, clock: {}", program, clock);
             let mut emulator = Emulator::new(&program);
             loop {
                 emulator.run();
