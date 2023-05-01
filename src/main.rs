@@ -1,13 +1,16 @@
-use clap::{Parser, Subcommand};
-
-extern crate env_logger as logger;
-extern crate log;
-use std::env;
-
 mod cpu;
 mod emulator;
 mod register;
 mod rom;
+
+use clap::{Parser, Subcommand};
+use std::env;
+use tokio::time::{sleep, Duration};
+
+extern crate env_logger as logger;
+extern crate log;
+
+use crate::emulator::Emulator;
 
 #[derive(Subcommand, Debug)]
 enum SubCommand {
@@ -16,7 +19,7 @@ enum SubCommand {
         #[clap(long)]
         program: String,
 
-        #[clap(long, default_value_t = 1000)]
+        #[clap(long, default_value_t = 100)]
         clock: u64,
     },
     #[clap(about = "compile binary file for td4 cpu emulator")]
@@ -36,7 +39,8 @@ struct Args {
     subcmd: SubCommand,
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     env::set_var("RUST_LOG", "info");
     logger::init();
 
@@ -44,6 +48,11 @@ fn main() {
     match cli.subcmd {
         SubCommand::Emulate { program, clock } => {
             println!("emulate program: {}, clock: {}", program, clock);
+            let mut emulator = Emulator::new(&program);
+            loop {
+                emulator.run();
+                sleep(Duration::from_millis(clock)).await;
+            }
         }
         SubCommand::Compile { src, dst } => {
             println!("compile src: {}, dst: {}", src, dst);
