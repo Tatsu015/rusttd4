@@ -1,0 +1,14 @@
+pub enum Opecode {
+    AddA = 0x00,
+    MovAB = 0x01,
+    InA = 0x02,
+    MovA = 0x03,
+    MovBa = 0x04,
+    AddB = 0x05,
+    InB = 0x06,
+    MovB = 0x07,
+    OutB = 0x09,
+    Out = 0x0b,
+    Jnc = 0x0c,
+    Jmp = 0x0f,
+}

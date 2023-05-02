@@ -1,5 +1,6 @@
 mod cpu;
 mod emulator;
+mod opecode;
 mod register;
 mod rom;
 
