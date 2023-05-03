@@ -3,6 +3,7 @@ use crate::tokenizer::Token;
 
 use std::fs::File;
 use std::io::Read;
+use std::io::Write;
 
 pub struct Compiler {}
 
@@ -12,15 +13,19 @@ impl Compiler {
     }
 
     pub fn compile(&self, file_path: &str) {
-        let mut file = File::open(file_path).unwrap();
+        let mut in_file = File::open(file_path).unwrap();
         let mut code = String::new();
-        file.read_to_string(&mut code).unwrap();
+        in_file.read_to_string(&mut code).unwrap();
 
         let tokens = tokenize(&code).unwrap();
-        Self::generate(&tokens);
+        let bin = Self::generate(&tokens);
+
+        let mut out_file = File::create("./test").unwrap();
+        out_file.write_all(bin).unwrap();
     }
 
-    fn generate(tokens: &Vec<Token>) {
+    fn generate(tokens: &Vec<Token>) -> &[u8] {
         println!("{:#?}", tokens);
+        return &[1u8];
     }
 }
