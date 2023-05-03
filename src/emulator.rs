@@ -23,17 +23,21 @@ impl Emulator {
         println!("\x1b[2J");
         loop {
             let instruction = self.cpu.fetch();
-            self.cpu.pc_up();
             let decoded = self.cpu.decode(instruction);
+
+            // pc count up before execute, because execute maybe change pc.
+            self.cpu.pc_up();
             self.cpu.execute(decoded.0, decoded.1);
+            let out = self.cpu.get_out();
+
+            Self::show(out);
+
             sleep(Duration::from_millis(clock));
-            self.show();
         }
     }
 
-    fn show(&self) {
+    fn show(out: u8) {
         println!("\x1b[H");
-        let out = self.cpu.get_out();
         let s = format!("{:0>4b}", out);
         let s = s.replace("0", "□").replace("1", "■");
         println!("\r{}", s);
