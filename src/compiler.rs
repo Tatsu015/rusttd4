@@ -1,3 +1,6 @@
+use crate::tokenizer::tokenize;
+use crate::tokenizer::Token;
+
 use std::fs::File;
 use std::io::Read;
 
@@ -12,6 +15,12 @@ impl Compiler {
         let mut file = File::open(file_path).unwrap();
         let mut code = String::new();
         file.read_to_string(&mut code).unwrap();
-        println!("\r{}", code);
+
+        let tokens = tokenize(&code).unwrap();
+        Self::generate(&tokens);
+    }
+
+    fn generate(tokens: &Vec<Token>) {
+        println!("{:#?}", tokens);
     }
 }

@@ -4,6 +4,7 @@ mod emulator;
 mod opecode;
 mod register;
 mod rom;
+mod tokenizer;
 
 extern crate env_logger as logger;
 extern crate log;

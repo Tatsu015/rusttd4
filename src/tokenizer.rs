@@ -1,12 +1,13 @@
-#[derive(Debug, PartialEq)]
+#[derive(Debug)]
 pub enum Kind {
     Opecode,
     Operand,
 }
 
+#[derive(Debug)]
 pub struct Token {
-    kind: Kind,
-    val: String,
+    pub kind: Kind,
+    pub val: String,
 }
 
 impl Token {
