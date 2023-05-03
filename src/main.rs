@@ -6,7 +6,6 @@ mod rom;
 
 use clap::{Parser, Subcommand};
 use std::env;
-use tokio::time::{sleep, Duration};
 
 extern crate env_logger as logger;
 extern crate log;
@@ -40,8 +39,7 @@ struct Args {
     subcmd: SubCommand,
 }
 
-#[tokio::main]
-async fn main() {
+fn main() {
     env::set_var("RUST_LOG", "info");
     logger::init();
 
@@ -49,10 +47,7 @@ async fn main() {
     match cli.subcmd {
         SubCommand::Emulate { program, clock } => {
             let mut emulator = Emulator::new(&program);
-            loop {
-                emulator.run();
-                sleep(Duration::from_millis(clock)).await;
-            }
+            emulator.run(clock);
         }
         SubCommand::Compile { src, dst } => {
             println!("compile src: {}, dst: {}", src, dst);
