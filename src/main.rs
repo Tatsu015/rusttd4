@@ -1,16 +1,18 @@
+mod compiler;
 mod cpu;
 mod emulator;
 mod opecode;
 mod register;
 mod rom;
 
-use clap::{Parser, Subcommand};
-use std::env;
-
 extern crate env_logger as logger;
 extern crate log;
 
-use crate::emulator::Emulator;
+use clap::{Parser, Subcommand};
+use std::env;
+
+use compiler::Compiler;
+use emulator::Emulator;
 
 #[derive(Subcommand, Debug)]
 enum SubCommand {
@@ -46,11 +48,12 @@ fn main() {
     let cli = Args::parse();
     match cli.subcmd {
         SubCommand::Emulate { program, clock } => {
-            let mut emulator = Emulator::new(&program);
-            emulator.run(clock);
+            let mut e = Emulator::new(&program);
+            e.run(clock);
         }
         SubCommand::Compile { src, dst } => {
-            println!("compile src: {}, dst: {}", src, dst);
+            let c = Compiler::new();
+            c.compile(&src)
         }
     }
 }
