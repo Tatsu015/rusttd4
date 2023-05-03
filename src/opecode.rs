@@ -14,7 +14,7 @@ pub enum Opecode {
 }
 
 impl Opecode {
-    fn from(opecode: u8) -> Option<Self> {
+    pub fn from_u8(opecode: u8) -> Option<Self> {
         match opecode {
             0x00 => Some(Opecode::AddA),
             0x01 => Some(Opecode::MovAB),

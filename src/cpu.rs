@@ -1,3 +1,4 @@
+use crate::opecode::Opecode;
 use crate::register::Register;
 use crate::rom::Rom;
 
@@ -50,19 +51,20 @@ impl Cpu {
 
     pub fn execute(&mut self, opecode: u8, immidiate: u8) {
         log::debug!("Execute instruction");
-        match opecode {
-            0x00 => self.add_a(immidiate),
-            0x01 => self.mov_ab(),
-            0x02 => self.in_a(immidiate),
-            0x03 => self.mov_a(immidiate),
-            0x04 => self.mov_ba(),
-            0x05 => self.add_b(immidiate),
-            0x06 => self.in_b(),
-            0x07 => self.mov_b(immidiate),
-            0x09 => self.out_b(),
-            0x0b => self.out(immidiate),
-            0x0c => self.jnc(immidiate),
-            0x0f => self.jmp(immidiate),
+        let op = Opecode::from_u8(opecode).unwrap();
+        match op {
+            Opecode::AddA => self.add_a(immidiate),
+            Opecode::MovAB => self.mov_ab(),
+            Opecode::InA => self.in_a(immidiate),
+            Opecode::MovA => self.mov_a(immidiate),
+            Opecode::MovBa => self.mov_ba(),
+            Opecode::AddB => self.add_b(immidiate),
+            Opecode::InB => self.in_b(),
+            Opecode::MovB => self.mov_b(immidiate),
+            Opecode::OutB => self.out_b(),
+            Opecode::Out => self.out(immidiate),
+            Opecode::Jnc => self.jnc(immidiate),
+            Opecode::Jmp => self.jmp(immidiate),
             _ => {
                 log::error!("Unknown OpeCode! {}", opecode as u8);
             }
