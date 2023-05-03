@@ -2,6 +2,8 @@ use crate::opecode::Opecode;
 use crate::register::Register;
 use crate::rom::Rom;
 
+use std::convert::TryFrom;
+
 pub struct Cpu {
     pc: Register,
     carry: Register,
@@ -51,13 +53,13 @@ impl Cpu {
 
     pub fn execute(&mut self, opecode: u8, immidiate: u8) {
         log::debug!("Execute instruction");
-        let op = Opecode::from_u8(opecode).unwrap();
+        let op = Opecode::try_from(opecode).unwrap();
         match op {
             Opecode::AddA => self.add_a(immidiate),
             Opecode::MovAB => self.mov_ab(),
             Opecode::InA => self.in_a(immidiate),
             Opecode::MovA => self.mov_a(immidiate),
-            Opecode::MovBa => self.mov_ba(),
+            Opecode::MovBA => self.mov_ba(),
             Opecode::AddB => self.add_b(immidiate),
             Opecode::InB => self.in_b(),
             Opecode::MovB => self.mov_b(immidiate),
@@ -65,9 +67,6 @@ impl Cpu {
             Opecode::Out => self.out(immidiate),
             Opecode::Jnc => self.jnc(immidiate),
             Opecode::Jmp => self.jmp(immidiate),
-            _ => {
-                log::error!("Unknown OpeCode! {}", opecode as u8);
-            }
         }
     }
 
