@@ -1,6 +1,7 @@
 mod compiler;
 mod cpu;
 mod emulator;
+mod generator;
 mod opecode;
 mod register;
 mod rom;

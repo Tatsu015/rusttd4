@@ -1,5 +1,5 @@
+use crate::generator::generate;
 use crate::tokenizer::tokenize;
-use crate::tokenizer::Token;
 
 use std::fs::File;
 use std::io::Read;
@@ -18,14 +18,9 @@ impl Compiler {
         in_file.read_to_string(&mut code).unwrap();
 
         let tokens = tokenize(&code).unwrap();
-        let bin = Self::generate(&tokens);
+        let bin = generate(&tokens);
 
         let mut out_file = File::create("./test").unwrap();
         out_file.write_all(bin).unwrap();
-    }
-
-    fn generate(tokens: &Vec<Token>) -> &[u8] {
-        println!("{:#?}", tokens);
-        return &[1u8];
     }
 }
