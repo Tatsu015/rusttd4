@@ -53,7 +53,7 @@ impl Cpu {
 
     pub fn execute(&mut self, opecode: u8, immidiate: u8) {
         log::debug!("Execute instruction");
-        let op = Opecode::try_from(opecode).unwrap();
+        let op = Opecode::u8_to_ope(opecode).unwrap();
         match op {
             Opecode::AddA => self.add_a(immidiate),
             Opecode::MovAB => self.mov_ab(),

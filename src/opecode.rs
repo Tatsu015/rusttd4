@@ -18,7 +18,7 @@ pub enum Opecode {
 }
 
 impl Opecode {
-    pub fn from_str(opecode: &str) -> Option<Self> {
+    pub fn str_to_ope(opecode: &str) -> Option<Self> {
         match opecode {
             "ADD A" => Some(Opecode::AddA),
             "MOV AB" => Some(Opecode::MovAB),
@@ -33,6 +33,15 @@ impl Opecode {
             "JNC" => Some(Opecode::Jnc),
             "JMP" => Some(Opecode::Jmp),
             _ => None,
+        }
+    }
+    pub fn u8_to_ope(opecode: u8) -> Option<Self> {
+        Some(Opecode::try_from(opecode).unwrap())
+    }
+    pub fn str_to_u8(opecode: &str) -> Option<u8> {
+        match Self::str_to_ope(opecode) {
+            Some(ope) => Some(ope as u8),
+            None => None,
         }
     }
 }

@@ -21,6 +21,6 @@ impl Compiler {
         let bin = generate(&tokens);
 
         let mut out_file = File::create("./test").unwrap();
-        out_file.write_all(bin).unwrap();
+        out_file.write_all(&bin).unwrap();
     }
 }
