@@ -12,6 +12,7 @@ extern crate log;
 
 use clap::{Parser, Subcommand};
 use std::env;
+use std::path::Path;
 
 use compiler::Compiler;
 use emulator::Emulator;
@@ -55,7 +56,17 @@ fn main() {
         }
         SubCommand::Compile { src, dst } => {
             let c = Compiler::new();
-            c.compile(&src)
+
+            let extension = Path::new(&src).extension().unwrap();
+            if extension != "td4asm" {
+                panic!("extension need to td4asm");
+            }
+            if dst == "" {
+                let same_dst = String::from(Path::new(&src).file_stem().unwrap().to_str().unwrap());
+                c.compile(&src, &same_dst)
+            } else {
+                c.compile(&src, &dst)
+            }
         }
     }
 }

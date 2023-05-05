@@ -12,15 +12,15 @@ impl Compiler {
         Compiler {}
     }
 
-    pub fn compile(&self, file_path: &str) {
-        let mut in_file = File::open(file_path).unwrap();
+    pub fn compile(&self, src_file_path: &str, dst_file_path: &str) {
+        let mut in_file = File::open(src_file_path).unwrap();
         let mut code = String::new();
         in_file.read_to_string(&mut code).unwrap();
 
         let tokens = tokenize(&code).unwrap();
         let bin = generate(&tokens);
 
-        let mut out_file = File::create("./test").unwrap();
+        let mut out_file = File::create(dst_file_path).unwrap();
         out_file.write_all(&bin).unwrap();
     }
 }
