@@ -24,5 +24,10 @@ pub fn generate(tokens: &Vec<Token>) -> Box<[u8]> {
 }
 
 fn squash(bite_code: &Vec<u8>) -> Box<[u8]> {
-    bite_code.clone().into_boxed_slice()
+    let mut squashed: Vec<u8> = Vec::new();
+    for pair in bite_code.chunks(2) {
+        let t: u8 = (pair[0] << 4) | pair[1];
+        squashed.push(t);
+    }
+    squashed.into_boxed_slice()
 }
