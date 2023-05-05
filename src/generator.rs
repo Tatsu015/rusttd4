@@ -8,7 +8,6 @@ pub fn generate(tokens: &Vec<Token>) -> Box<[u8]> {
     for t in tokens {
         match t.kind {
             Kind::Opecode => {
-                println!("{:#?}", t);
                 let opecode = Opecode::str_to_u8(&t.val).unwrap();
                 bite_code.push(opecode);
             }
