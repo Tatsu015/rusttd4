@@ -5,18 +5,24 @@ use crate::{
 
 pub fn generate(tokens: &Vec<Token>) -> Box<[u8]> {
     println!("{:#?}", tokens);
-    let mut mnimmonics: Vec<u8> = Vec::new();
+    let mut bite_code: Vec<u8> = Vec::new();
     for t in tokens {
         match t.kind {
             Kind::Opecode => {
                 let opecode = Opecode::str_to_u8(&t.val).unwrap();
-                mnimmonics.push(opecode);
+                bite_code.push(opecode);
             }
             Kind::Operand => {
                 let val = u8::from_str_radix(&t.val, 2).unwrap();
-                mnimmonics.push(val);
+                bite_code.push(val);
             }
         }
     }
-    return mnimmonics.into_boxed_slice();
+
+    let squashed = squash(&bite_code);
+    squashed
+}
+
+fn squash(bite_code: &Vec<u8>) -> Box<[u8]> {
+    bite_code.clone().into_boxed_slice()
 }
