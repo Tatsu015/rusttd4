@@ -2,8 +2,6 @@ use crate::opecode::Opecode;
 use crate::register::Register;
 use crate::rom::Rom;
 
-use std::convert::TryFrom;
-
 pub struct Cpu {
     pc: Register,
     carry: Register,

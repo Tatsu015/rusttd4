@@ -45,10 +45,10 @@ fn to_token(mnemonic: &str) -> Result<Vec<Token>, String> {
     }
 
     // splitted first element become opecode, and second element become operand
-    let c = elms.get(0).unwrap();
+    let c = elms.get(0).unwrap().trim();
     let opecode = Token::new(Kind::Opecode, c.to_string());
 
-    let r = elms.get(1).unwrap();
+    let r = elms.get(1).unwrap().trim();
     let operand = Token::new(Kind::Operand, r.to_string());
 
     Ok(vec![opecode, operand])

@@ -4,7 +4,6 @@ use crate::{
 };
 
 pub fn generate(tokens: &Vec<Token>) -> Box<[u8]> {
-    println!("{:#?}", tokens);
     let mut bite_code: Vec<u8> = Vec::new();
     for t in tokens {
         match t.kind {
