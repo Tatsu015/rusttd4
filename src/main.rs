@@ -1,12 +1,3 @@
-mod compiler;
-mod cpu;
-mod emulator;
-mod generator;
-mod opecode;
-mod register;
-mod rom;
-mod tokenizer;
-
 extern crate env_logger as logger;
 extern crate log;
 
@@ -14,8 +5,8 @@ use clap::{Parser, Subcommand};
 use std::env;
 use std::path::Path;
 
-use compiler::Compiler;
-use emulator::Emulator;
+use rusttd4::compile::compiler::Compiler;
+use rusttd4::emulate::emulator::Emulator;
 
 #[derive(Subcommand, Debug)]
 enum SubCommand {

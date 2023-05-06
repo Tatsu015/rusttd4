@@ -1,5 +1,5 @@
-use crate::generator::generate;
-use crate::tokenizer::tokenize;
+use crate::compile::generator::generate;
+use crate::compile::tokenizer::tokenize;
 
 use std::fs::File;
 use std::io::Read;

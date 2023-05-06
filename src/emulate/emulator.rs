@@ -1,9 +1,9 @@
 use std::thread::sleep;
 use std::time::Duration;
 
-use crate::cpu::Cpu;
-use crate::register::Register;
-use crate::rom::Rom;
+use crate::emulate::cpu::Cpu;
+use crate::emulate::register::Register;
+use crate::emulate::rom::Rom;
 
 pub struct Emulator {
     cpu: Cpu,

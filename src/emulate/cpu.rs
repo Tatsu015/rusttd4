@@ -1,6 +1,6 @@
 use crate::opecode::Opecode;
-use crate::register::Register;
-use crate::rom::Rom;
+
+use super::{register::Register, rom::Rom};
 
 pub struct Cpu {
     pc: Register,

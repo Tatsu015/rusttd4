@@ -1,7 +1,5 @@
-use crate::{
-    opecode::Opecode,
-    tokenizer::{Kind, Token},
-};
+use crate::compile::tokenizer::{Kind, Token};
+use crate::opecode::Opecode;
 
 pub fn generate(tokens: &Vec<Token>) -> Box<[u8]> {
     let mut bite_code: Vec<u8> = Vec::new();
